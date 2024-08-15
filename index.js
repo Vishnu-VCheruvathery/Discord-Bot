@@ -1,6 +1,13 @@
 import 'dotenv/config';
 import { Client, GatewayIntentBits } from 'discord.js';
 import axios from 'axios';
+import http from 'http';
+
+// Create a simple HTTP server to keep the service alive
+const server = http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('Bot is running\n');
+});
 
 const client = new Client({ 
     intents: [
@@ -118,3 +125,8 @@ client.on('interactionCreate', async (interaction) => {
 
 client.login(process.env.AUTH_TOKEN);
 
+// Start the server on the port provided by the environment or default to 3000
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
